@@ -1,0 +1,234 @@
+{
+	"info": {
+		"_postman_id": "4bcdd437-7a6d-4d33-9946-c7139fcb03d6",
+		"name": "TestLocalAutomation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24844035"
+	},
+	"item": [
+		{
+			"name": "New Folder",
+			"item": [
+				{
+					"name": "Create the User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var status=pm.response.code;\r",
+									"console.log(status)\r",
+									"if(status==201){\r",
+									"//Store the response into variable\r",
+									"var requestresponse=JSON.parse(responseBody);\r",
+									"//Store request body into variable\r",
+									"var requestBody=JSON.parse(request.data)\r",
+									"//Set request body into env\r",
+									"pm.environment.set(\"userrequestData\",requestBody)\r",
+									"pm.environment.set(\"employeeID\",requestresponse.id)\r",
+									"tests[\"Verify firstName \"+requestresponse.firstName]=requestresponse.firstName == requestBody.firstName;\r",
+									"tests[\"Verify lastName \"+requestresponse.lastName]=requestresponse.lastName == requestBody.lastName;\r",
+									"tests[\"Verify maidenName \"+requestresponse.maidenName]=requestresponse.maidenName == requestBody.maidenName;\r",
+									"tests[\"Verify gender \"+requestresponse.gender]=requestresponse.gender == requestBody.gender;\r",
+									"}\r",
+									"else{\r",
+									"    tests[\"Verify status failed \"]=pm.response.code == 201;\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"{{firstName}}\",\r\n    \"lastName\": \"{{lastName}}\",\r\n    \"maidenName\": \"{{maidenName}}\",\r\n    \"age\": \"{{age}}\",\r\n    \"gender\": \"{{gender}}\",\r\n    \"email\": \"{{email}}\",\r\n    \"phone\": \"{{phone}}\",\r\n    \"username\": \"{{username}}\",\r\n    \"password\": \"{{password}}\",\r\n    \"birthDate\": \"{{birthDate}}\",\r\n    \"bloodGroup\": \"{{bloodGroup}}\",\r\n    \"height\":\"{{height}}\",\r\n    \"weight\":\"{{weight}}\",\r\n    \"eyeColor\":\"{{eyeColor}}\",\r\n    \"hair\":\"{{hair}}\",\r\n    \"domain\":\"{{domain}}\",\r\n    \"ip\":\"{{ip}}\",\r\n    \"address\":\"{{address}}\"\r\n    }\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}{{baseUrl}}/users",
+							"host": [
+								"{{protocol}}{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var status=pm.response.code;\r",
+									"if(status==200){\r",
+									"var getResponseBody = JSON.parse(responseBody);\r",
+									"var getRequestBody = pm.environment.get(\"userrequestData\");\r",
+									"tests[\"Verify first Name \"+getResponseBody.firstName]= getResponseBody.firstName == getRequestBody.firstName;\r",
+									"tests[\"Verify last Name \"+getResponseBody.lastName] = getResponseBody.lastName == getRequestBody.lastName;\r",
+									"tests[\"Verify maidenName \"+getResponseBody.maidenName]= getResponseBody.maidenName == getRequestBody.maidenName;\r",
+									"tests[\"Verify ID \"+getResponseBody.id]= getResponseBody.id != \"\" && getResponseBody.id != null; \r",
+									"}\r",
+									"else{\r",
+									"    tests[\"Status code not matched \"+status] = status == 200;\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}{{baseUrl}}/users/{{employeeID}}",
+							"host": [
+								"{{protocol}}{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"{{employeeID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Tthe User data using put method",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"firstName\": \"Praveen\",\r\n        \"lastName\": \"Shinde\",\r\n        \"maidenName\": \"Dinesh\",\r\n        \"age\": 32,\r\n        \"gender\": \"male\",\r\n        \"email\": \"anand@shinde.com\",\r\n        \"phone\": \"+63 791 675 8914\",\r\n        \"username\": \"anand\",\r\n        \"password\": \"84anand\",\r\n        \"birthDate\": \"2000-09-22\",\r\n        \"bloodGroup\": \"O\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}{{baseUrl}}/users/{{employeeID}}",
+							"host": [
+								"{{protocol}}{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"{{employeeID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Updatr or add data using Patch Method",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"email\": \"anand@s.com\",\r\n        \"phone\": \"+63 791 675 8914\",\r\n        \"username\": \"anandk\",\r\n        \"password\": \"84anandk\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}{{baseUrl}}/users/{{employeeID}}",
+							"host": [
+								"{{protocol}}{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"{{employeeID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete the User",
+					"request": {
+						"method": "DELETE",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get All User Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var getresponseBody =JSON.parse(responseBody);\r",
+									"var getrequestBody =pm.environment.get(\"userrequestData\");\r",
+									"var getemployeeID = pm.environment.get(\"employeeID\");\r",
+									"var status=pm.response.code;\r",
+									"if(status==200){\r",
+									"    for(var i=0;i<getresponseBody.length;i++){\r",
+									"        if(getresponseBody[i].id == getemployeeID){\r",
+									"            tests[\"verify firts name \"+getresponseBody[i].firstName]= getresponseBody[i].firstName == getrequestBody.firstName;\r",
+									"            \r",
+									"            tests[\"verify last name \"+getresponseBody[i].lastName]= getresponseBody[i].lastName == getrequestBody.lastName;\r",
+									"            \r",
+									"            tests[\"verify maidenName name \"+getresponseBody[i].maidenName]= getresponseBody[i].maidenName == getrequestBody.maidenName;\r",
+									"            \r",
+									"           // tests[\"verify city \"+getresponseBody[i].address.city]= getresponseBody[i].address.city == getrequestBody.address.city;\r",
+									"            break;\r",
+									"\r",
+									"        }\r",
+									"    }\r",
+									"\r",
+									"}\r",
+									"else {\r",
+									"    tests[\"Status code not matched \"+status] = status== 200;\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{protocol}}{{baseUrl}}/users",
+							"host": [
+								"{{protocol}}{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
